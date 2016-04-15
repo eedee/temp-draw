@@ -1,0 +1,93 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1344\cocoasubrtf720
+{\fonttbl\f0\fnil\fcharset0 Menlo-Regular;}
+{\colortbl;\red255\green255\blue255;\red0\green116\blue0;\red170\green13\blue145;\red92\green38\blue153;
+\red28\green0\blue207;\red46\green13\blue110;\red63\green110\blue116;}
+\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\deftab529
+\pard\tx529\pardeftab529\pardirnatural
+
+\f0\fs22 \cf2 \CocoaLigature0 //\
+//  Doodle.swift\
+//  draw7\
+//\
+//  Created by Andrew Nadlman on 4/4/15.\
+//  Copyright (c) 2015 Andrew Nadlman. All rights reserved.\
+//\
+\pard\tx529\pardeftab529\pardirnatural
+\cf0 \
+\cf3 import\cf0  UIKit\
+\
+\cf3 class\cf0  Doodle: \cf4 UIView\cf0  \{\
+    \cf3 var\cf0  flag = \cf3 false\cf0 \
+    \cf3 var\cf0  P:[\cf4 CGPoint\cf0 ] = [\cf4 CGPointZero\cf0 , \cf4 CGPointZero\cf0 , \cf4 CGPointZero\cf0 , \cf4 CGPointZero\cf0 ]\
+    \cf3 var\cf0  Q = \cf4 CGPoint\cf0 (x: \cf5 0.0\cf0 , y: \cf5 0.0\cf0 )\
+    \
+    \cf3 var\cf0  a = \cf4 UIBezierPath\cf0 () \cf2 //draw circles at points\
+\cf0     \cf3 var\cf0  b = \cf4 UIBezierPath\cf0 () \cf2 //draw straight lines\
+\cf0     \cf3 var\cf0  c = \cf4 UIBezierPath\cf0 () \cf2 //draw curved lines\
+\cf0     \cf3 var\cf0  d = \cf4 UIBezierPath\cf0 () \cf2 //draw control points\
+\cf0     \
+    \cf3 var\cf0  i:\cf4 Int\cf0  = \cf5 0\cf0 \
+    \
+    \cf3 override\cf0  \cf3 func\cf0  drawRect(rect: \cf4 CGRect\cf0 ) \{\
+        \cf2 // Drawing code\
+\cf0         \cf2 //a.fill()\
+\cf0         \cf2 //b.stroke()\
+\cf0         \cf2 //UIColor.greenColor().setStroke()\
+\cf0         \cf2 //d.stroke()\
+\cf0         \cf4 UIColor\cf0 .\cf6 redColor\cf0 ().\cf6 setStroke\cf0 ()\
+        \cf7 c\cf0 .\cf6 stroke\cf0 ()\
+        \cf4 UIColor\cf0 .\cf6 blackColor\cf0 ().\cf6 setStroke\cf0 ()\
+    \}\
+    \
+    \cf3 override\cf0  \cf3 func\cf0  touchesBegan(touches: \cf4 Set\cf0 <\cf4 NSObject\cf0 >, withEvent event: \cf4 UIEvent\cf0 )->\cf4 Void\cf0   \{\
+        \cf3 let\cf0  point:\cf4 CGPoint\cf0  = (touches.\cf4 first\cf0  \cf3 as\cf0 ! \cf4 UITouch\cf0 ).\cf6 locationInView\cf0 (\cf3 self\cf0 )\
+        \cf7 flag\cf0  = \cf3 false\cf0 \
+        \cf7 P\cf0 [\cf5 0\cf0 ] = point\
+        \cf7 i\cf0  = \cf5 0\cf0 \
+    \}\
+    \
+    \cf3 override\cf0  \cf3 func\cf0  touchesMoved(touches: \cf4 Set\cf0 <\cf4 NSObject\cf0 >, withEvent event: \cf4 UIEvent\cf0 )->\cf4 Void\cf0   \{\
+        \cf3 let\cf0  point:\cf4 CGPoint\cf0  = (touches.\cf4 first\cf0  \cf3 as\cf0 ! \cf4 UITouch\cf0 ).\cf6 locationInView\cf0 (\cf3 self\cf0 )\
+        \cf7 i\cf0 ++\
+        \cf7 P\cf0 [\cf7 i\cf0 ] = point\
+        \
+        \cf7 a\cf0 .\cf6 moveToPoint\cf0 (point)\
+        \cf7 a\cf0 .\cf6 addArcWithCenter\cf0 (point, radius: \cf5 2.0\cf0 , startAngle: \cf5 0.0\cf0 , endAngle: \cf5 360.0\cf0 , clockwise: \cf3 true\cf0 )\
+        \cf3 if\cf0  !\cf7 flag\cf0  \{\
+            \cf7 b\cf0 .\cf6 moveToPoint\cf0 (point)\
+            \cf7 c\cf0 .\cf6 moveToPoint\cf0 (point)\
+            \cf7 flag\cf0  = \cf3 true\cf0 \
+        \}\
+        \cf7 b\cf0 .\cf6 addLineToPoint\cf0 (point)\
+        \
+        \cf3 if\cf0  \cf7 i\cf0  == \cf5 3\cf0  \{\
+            \
+            \cf2 //P[2].x = (P[1].x + P[3].x) / 2.0\
+\cf0             \cf2 //P[2].y = (P[1].y + P[3].y) / 2.0\
+\cf0             \
+            \cf7 Q\cf0 .\cf4 x\cf0  = (\cf7 P\cf0 [\cf5 1\cf0 ].\cf4 x\cf0  + \cf7 P\cf0 [\cf5 3\cf0 ].\cf4 x\cf0 ) / \cf5 2.0\cf0 \
+            \cf7 Q\cf0 .\cf4 y\cf0  = (\cf7 P\cf0 [\cf5 1\cf0 ].\cf4 y\cf0  + \cf7 P\cf0 [\cf5 3\cf0 ].\cf4 y\cf0 ) / \cf5 2.0\cf0 \
+\
+            \cf7 P\cf0 [\cf5 2\cf0 ].\cf4 x\cf0  = (\cf7 P\cf0 [\cf5 2\cf0 ].\cf4 x\cf0  + \cf7 Q\cf0 .\cf4 x\cf0 ) / \cf5 2.0\cf0 \
+            \cf7 P\cf0 [\cf5 2\cf0 ].\cf4 y\cf0  = (\cf7 P\cf0 [\cf5 2\cf0 ].\cf4 y\cf0  + \cf7 Q\cf0 .\cf4 y\cf0 ) / \cf5 2.0\cf0 \
+            \cf2 //c.moveToPoint(P[0])\
+\cf0             \cf7 c\cf0 .\cf6 addQuadCurveToPoint\cf0 (\cf7 P\cf0 [\cf5 2\cf0 ], controlPoint: \cf7 P\cf0 [\cf5 1\cf0 ])\
+            \
+            \cf7 d\cf0 .\cf6 moveToPoint\cf0 (\cf7 P\cf0 [\cf5 0\cf0 ])\
+            \cf7 d\cf0 .\cf6 addLineToPoint\cf0 (\cf7 P\cf0 [\cf5 1\cf0 ])\
+            \cf7 d\cf0 .\cf6 addArcWithCenter\cf0 (\cf7 P\cf0 [\cf5 1\cf0 ], radius: \cf5 2.0\cf0 , startAngle: \cf5 0.0\cf0 , endAngle: \cf5 360.0\cf0 , clockwise: \cf3 true\cf0 )\
+            \cf7 d\cf0 .\cf6 addLineToPoint\cf0 (\cf7 P\cf0 [\cf5 2\cf0 ])\
+            \
+            \cf7 P\cf0 [\cf5 0\cf0 ] = \cf7 P\cf0 [\cf5 2\cf0 ]\
+            \cf7 P\cf0 [\cf5 1\cf0 ] = \cf7 P\cf0 [\cf5 3\cf0 ]\
+            \cf7 i\cf0  = \cf5 1\cf0 \
+        \}\
+        \cf3 self\cf0 .\cf6 setNeedsDisplay\cf0 ()\
+    \}\
+\}\
+\
+\pard\tx529\pardeftab529\pardirnatural
+\cf2 //let L1:CGFloat = sqrt( pow((A.x-Q[0].x), 2) + pow((A.y-Q[0].y), 2) )\
+//let L2:CGFloat = sqrt( pow((Q[3].x-A.x), 2) + pow((Q[3].y-A.y), 2) )\
+//let t:CGFloat = L1 / (L1 + L2)}
